@@ -1,0 +1,42 @@
+services:
+  postgresql:
+    image: postgres:15
+    environment:
+      POSTGRES_DB: odoo
+      POSTGRES_USER: odoo
+      POSTGRES_PASSWORD: odoo
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./data/postgresql:/var/lib/postgresql/data/pgdata
+    ports:
+      - "5432:5432"
+    restart: unless-stopped
+
+  odoo:
+    image: odoo:17.0
+    depends_on:
+      - postgresql
+    ports:
+      - "8069:8069"
+    volumes:
+      - ./addons:/mnt/extra-addons
+      - ./config:/etc/odoo
+      - odoo-web-data:/var/lib/odoo
+    environment:
+      - HOST=postgresql
+      - USER=odoo
+      - PASSWORD=odoo
+    restart: unless-stopped
+    command: >
+      odoo 
+      --database=odoo 
+      --db_host=postgresql 
+      --db_user=odoo 
+      --db_password=odoo 
+      --addons-path=/mnt/extra-addons,/usr/lib/python3/dist-packages/odoo/addons 
+      --init=base,website,website_sale,sale_management,stock,payment,delivery,crm,account,marketing_automation,auth_signup,custom_product_fields,custom_sales_report
+      --demo=all
+      --without-demo=False
+
+volumes:
+  odoo-web-data:

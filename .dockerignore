@@ -1,0 +1,19 @@
+# Project
+
+/docs
+/logs
+/tests
+/venv
+/.venv
+/env
+/.git
+/.github
+/.vscode
+.dockerignore
+.gitignore
+.env.example
+docker-compose.yml
+README.md
+conftest.py
+db.sqlite3
+__pycache__
