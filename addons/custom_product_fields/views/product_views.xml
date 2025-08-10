@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- Product Template Form View -->
+        <record id="product_template_form_view_custom" model="ir.ui.view">
+            <field name="name">product.template.form.custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='categ_id']" position="after">
+                    <field name="brand"/>
+                    <field name="warranty_months"/>
+                </xpath>
+                <xpath expr="//group[@name='group_general']" position="inside">
+                    <field name="warranty_description"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Product Template Tree View -->
+        <record id="product_template_tree_view_custom" model="ir.ui.view">
+            <field name="name">product.template.tree.custom</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_tree_view"/>
+            <field name="arch" type="xml">
+                <xpath expr="//field[@name='list_price']" position="after">
+                    <field name="brand"/>
+                    <field name="warranty_months"/>
+                </xpath>
+            </field>
+        </record>
+
+        <!-- Website Product Page -->
+        <template id="product_custom_info" inherit_id="website_sale.product">
+            <xpath expr="//div[@id='product_details']//hr[1]" position="after">
+                <div t-if="product.brand" class="mb-3">
+                    <strong>Brand: </strong>
+                    <span t-esc="product.brand"/>
+                </div>
+                <div t-if="product.warranty_months" class="mb-3">
+                    <strong>Warranty: </strong>
+                    <span t-esc="product.warranty_months"/> months
+                </div>
+                <div t-if="product.warranty_description" class="mb-3">
+                    <strong>Warranty Details: </strong>
+                    <span t-esc="product.warranty_description"/>
+                </div>
+            </xpath>
+        </template>
+    </data>
+</odoo>

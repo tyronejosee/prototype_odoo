@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="monthly_sales_report_template">
+            <t t-call="web.html_container">
+                <div class="header">
+                    <div class="row">
+                        <div class="col-12">
+                            <h2>Monthly Sales Report</h2>
+                            <p>Period: <span t-esc="data['date_from']"/> to <span t-esc="data['date_to']"/></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="page">
+                    <!-- Summary -->
+                    <div class="row mb-4">
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3 t-esc="data['total_orders']"/>
+                                    <p>Total Orders</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card">
+                                <div class="card-body text-center">
+                                    <h3>$<span t-esc="'{:,.2f}'.format(data['total_revenue'])"/></h3>
+                                    <p>Total Revenue</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Top Products -->
+                    <div class="row">
+                        <div class="col-12">
+                            <h4>Top 10 Products</h4>
+                            <table class="table table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Product</th>
+                                        <th>Brand</th>
+                                        <th>Quantity Sold</th>
+                                        <th>Revenue</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data['top_products']" t-as="product">
+                                        <td t-esc="product[0]"/>
+                                        <td t-esc="product[1]['brand']"/>
+                                        <td t-esc="product[1]['qty']"/>
+                                        <td>$<span t-esc="'{:,.2f}'.format(product[1]['amount'])"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </t>
+        </template>
+
+        <report id="action_monthly_sales_report"
+                model="monthly.sales.report"
+                string="Monthly Sales Report"
+                report_type="qweb-pdf"
+                name="custom_sales_report.monthly_sales_report_template"
+                file="custom_sales_report.monthly_sales_report"
+                print_report_name="'Monthly Sales Report - %s to %s' % (object.date_from, object.date_to)"/>
+    </data>
+</odoo>
